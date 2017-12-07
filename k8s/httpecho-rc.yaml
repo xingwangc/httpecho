@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: httpecho
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: "httpecho"
+    spec:
+      containers:
+      - name: httpecho
+        image: xingwangc/httpecho
+        resources:
+          requests:
+            memory: 20Mi
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        command: ["./httpecho","8000"]
+        volumeMounts:
+        - name: timezone
+          mountPath: /etc/localtime
+          readOnly: true
+      volumes:
+      - name: timezone
+        hostPath:
+          path: /etc/localtime
